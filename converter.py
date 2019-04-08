@@ -36,15 +36,12 @@ def main():
 
     if convertMode == 'tostring':
         # convert morse to string
-        finalMessage = convertToString(message, outputFileName)
-        print "Transltaion done! Check for new .txt file in the folder."
-        print "File is named '"+outputFileName+"'"
+        convertToString(message, outputFileName)
+
 
     if convertMode == 'tomorse':
         # convert string to morse
-        finalMessage = convertToMorse(message, outputFileName)
-        print "Transltaion done! Check for new .txt file in the folder."
-        print "File is named '"+outputFileName+"'"
+        convertToMorse(message, outputFileName)
 
     if convertMode == None:
         print "Please select converting method: 'tomorse' to turn string into morese"
@@ -52,7 +49,13 @@ def main():
 
 
 def convertToString(msg, endfile):
-    print("convert to string")
+
+    # Small adjustments have been made considering the task description.
+    # Logic in the description was to seperate characters with dots and make possible there can
+    # be no double dots. In this function the logic goes: characters are separated with space and
+    # words are separated with 2 spaces like "sos sos" -> ... --- ...  ... --- ...
+
+
     converted_message = ''
     morseCharacter = ''
     for letter in msg:
@@ -70,17 +73,19 @@ def convertToString(msg, endfile):
             # if i = 2 that indicates a new word
             if i == 2 :
                  # adding space to separate words
-                converted_message += ' '
+                 converted_message += ' '
             else:
                 # accessing the keys using their values (reverse of encryption)
-                converted_message += list(MORSE_CODE_DICT.keys())[list(MORSE_CODE_DICT
-                .values()).index(morseCharacter)]
+                converted_message += list(MORSE_CODE_DICT.keys())[list(MORSE_CODE_DICT.values()).index(morseCharacter)]
                 morseCharacter = ''
     outputFile = open(endfile, 'w+')
-    outputFile.write(converted_message)
+    outputFile.write((converted_message).upper())
+
+    print "Transltaion done! Check for new .txt file in the folder."
+    print "File is named '"+endfile+"'"
+
 
 def convertToMorse(msg, endfile):
-    print("convert to morse")
     converted_message = ''
     for letter in msg:
         if letter != ' ':
@@ -95,66 +100,8 @@ def convertToMorse(msg, endfile):
     outputFile = open(endfile, 'w+')
     outputFile.write(converted_message)
 
+    print "Transltaion done! Check for new .txt file in the folder."
+    print "File is named '"+ endfile +"'"
 
 if __name__ == '__main__':
     main()
-
-
-
-
-# dictionary for morse characters
-
-
-# Function to encrypt the string
-# according to the morse code chart
-'''
-def encrypt(message):
-    cipher = ''
-    for letter in message:
-        if letter != ' ':
-
-            # Looks up the dictionary and adds the
-            # correspponding morse code
-            # along with a space to separate
-            # morse codes for different characters
-            cipher += MORSE_CODE_DICT[letter] + ' '
-        else:
-            # 1 space indicates different characters
-            # and 2 indicates different words
-            cipher += ' '
-
-    return cipher
-'''
-# Function to decrypt the string
-# from morse to english
-'''
-def decrypt(message):
-    # extra space added at the end to access the
-    # last morse code
-    message += ' '
-
-    decipher = ''
-    citext = ''
-    for letter in message:
-        # checks for space
-        if (letter != ' '):
-            # counter to keep track of space
-            i = 0
-            # storing morse code of a single character
-            citext += letter
-        # in case of space
-        else:
-            # if i = 1 that indicates a new character
-            i += 1
-
-            # if i = 2 that indicates a new word
-            if i == 2 :
-                 # adding space to separate words
-                decipher += ' '
-            else:
-                # accessing the keys using their values (reverse of encryption)
-                decipher += list(MORSE_CODE_DICT.keys())[list(MORSE_CODE_DICT
-                .values()).index(citext)]
-                citext = ''
-    return decipher
-'''
