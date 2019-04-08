@@ -54,14 +54,14 @@ def main():
 def convertToString(msg, endfile):
     print("convert to string")
     converted_message = ''
-    citext = ''
+    morseCharacter = ''
     for letter in msg:
         # checks for space
         if (letter != ' '):
             # counter to keep track of space
             i = 0
             # storing morse code of a single character
-            citext += letter
+            morseCharacter += letter
 
         # in case of space
         else:
@@ -72,11 +72,10 @@ def convertToString(msg, endfile):
                  # adding space to separate words
                 converted_message += ' '
             else:
-
                 # accessing the keys using their values (reverse of encryption)
                 converted_message += list(MORSE_CODE_DICT.keys())[list(MORSE_CODE_DICT
-                .values()).index(citext)]
-                citext = ''
+                .values()).index(morseCharacter)]
+                morseCharacter = ''
     outputFile = open(endfile, 'w+')
     outputFile.write(converted_message)
 
