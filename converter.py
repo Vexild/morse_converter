@@ -25,50 +25,77 @@ MORSE_CODE_DICT = { 'A':'.-', 'B':'-...',
 
 def main():
 
-    # read characters from a file (.txt is fine)
-    targetFile = open(sys.argv[1], "r")
-    message = (targetFile.read()).upper()
+    #break up the parameters
+    targetFileName = open(sys.argv[1], "r")
+    outputFileName = sys.argv[2]
+    convertMode = sys.argv[3]
+
+    #get the message
+    message = (targetFileName.read()).upper()
     print message
-    # check the message; is it morse or english
-    firstInitial = message[0]
 
-    if firstInitial is '.' or firstInitial is '-':
+    if convertMode == 'tostring':
         # convert morse to string
-        convertToString(message)
+        finalMessage = convertToString(message, outputFileName)
         print "Transltaion done! Check for new .txt file in the folder."
-        print "File is named 'converted_string_message.txt'"
-    else:
+        print "File is named '"+outputFileName+"'"
+
+    if convertMode == 'tomorse':
         # convert string to morse
-        convertToMorse(message)
-
+        finalMessage = convertToMorse(message, outputFileName)
         print "Transltaion done! Check for new .txt file in the folder."
-        print "File is named 'converted_morse_message.txt'"
+        print "File is named '"+outputFileName+"'"
+
+    if convertMode == None:
+        print "Please select converting method: 'tomorse' to turn string into morese"
+        print "or 'tostring' to turn morse into string"
 
 
-
-def convertToString(msg):
+def convertToString(msg, endfile):
     print("convert to string")
+    converted_message = ''
+    citext = ''
+    for letter in msg:
+        # checks for space
+        if (letter != ' '):
+            # counter to keep track of space
+            i = 0
+            # storing morse code of a single character
+            citext += letter
 
+        # in case of space
+        else:
+            # if i = 1 that indicates a new character
+            i += 1
+            # if i = 2 that indicates a new word
+            if i == 2 :
+                 # adding space to separate words
+                converted_message += ' '
+            else:
 
+                # accessing the keys using their values (reverse of encryption)
+                converted_message += list(MORSE_CODE_DICT.keys())[list(MORSE_CODE_DICT
+                .values()).index(citext)]
+                citext = ''
+    outputFile = open(endfile, 'w+')
+    outputFile.write(converted_message)
 
-def convertToMorse(msg):
+def convertToMorse(msg, endfile):
     print("convert to morse")
     converted_message = ''
     for letter in msg:
         if letter != ' ':
-            # Looks up the dictionary and adds the
-            # correspponding morse code
-            # along with a space to separate
-            # morse codes for different characters
+            # convert every single character into morse character.
+            # a space is also added before next character
             converted_message += MORSE_CODE_DICT[letter] + ' '
         else:
-            # 1 space indicates different characters
-            # and 2 indicates different words
+            # second space is added to separate words
             converted_message += ' '
 
     # create an output text file and paste the result in it
-    outputFile = open('converted_morse_message.txt', 'w+')
-    outputFile.write(str(converted_message))
+    outputFile = open(endfile, 'w+')
+    outputFile.write(converted_message)
+
 
 if __name__ == '__main__':
     main()
